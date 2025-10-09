@@ -4,7 +4,7 @@ import logging
 from pydomo import Domo, Column, ColumnType, Schema
 from pydomo import DataSetRequest
 
-from commons import Ticket_ID_Data
+from commons import Ticket_Data
 from config.env import CLIENT_ID, CLIENT_SECRET,FreshDesk_Ticket_ID
 from utils import send_email_error
 from logger_config import setup_logging
@@ -56,7 +56,7 @@ def upload_csv_to_domo_daily():
     try:
         datasets_info = [
 
-            (FreshDesk_Ticket_ID,Ticket_ID_Data,date_time_ticket,
+            (FreshDesk_Ticket_ID,Ticket_Data,date_time_ticket,
              'Fresh Desk Ongoing ', 'Contains Last 30 days tickets info from Freshdesk'),
 
         ]
