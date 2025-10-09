@@ -1,4 +1,3 @@
-
 import time
 import requests
 import warnings
@@ -15,7 +14,7 @@ PER_PAGE = 100
 HEADERS = {"Content-Type": "application/json"}
 
 
-create_folder_if_does_not_exist(API_RESPONSE_DIR)
+create_folder_if_does_not_exist(API_Final_DIR)
 
 
 
