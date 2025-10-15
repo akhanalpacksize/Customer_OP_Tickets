@@ -82,6 +82,23 @@ def main():
     # Convert list columns (e.g. tags, emails) to comma-separated strings
     df = clean_lists(df)
 
+    int_columns = [
+        'email_config_id',
+        'group_id',
+        'responder_id',
+        'company_id'
+    ]
+
+    # Safely convert to nullable integer (Int64) where possible
+    for col in int_columns:
+        if col in df.columns:
+            # First, ensure the column is numeric (coerce errors to NaN)
+            df[col] = pd.to_numeric(df[col], errors='coerce')
+            # Then convert to nullable integer
+            df[col] = df[col].astype('Int64')
+
+
+
     # Save everything dynamically
     df.to_csv(Ticket_Data, index=False)
     print(f"💾 Saved {len(df)} tickets with {len(df.columns)} columns to {Ticket_Data}")
