@@ -86,7 +86,7 @@ from pydomo import Domo, Column, ColumnType, Schema
 from pydomo import DataSetRequest
 
 from commons import Ticket_Data
-from config.env import CLIENT_ID, CLIENT_SECRET, FreshDesk_Ticket_ID
+from config.env import CLIENT_ID, CLIENT_SECRET, freshdek_ticket_updated
 from utils import send_email_error
 from logger_config import setup_logging
 
@@ -142,12 +142,12 @@ def upload_csv_to_domo_daily():
     try:
         datasets_info = [
             (
-                FreshDesk_Ticket_ID,
+                freshdek_ticket_updated,
                 Ticket_Data,
                 date_time_ticket,
                 int_columns,
-                'Fresh Desk Ongoing',
-                'Contains Last 30 days tickets info from Freshdesk'
+                'Fresh Desk OngoingV2 (updated_at)',
+                'Contains Last 30 days tickets info from Freshdesk using updated_at filter'
             ),
         ]
         domo = Domo(CLIENT_ID, CLIENT_SECRET, api_host='api.domo.com')

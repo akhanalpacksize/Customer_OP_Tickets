@@ -2,6 +2,7 @@ import time
 import requests
 import warnings
 import pandas as pd
+from datetime import datetime, timedelta
 
 from utils import create_folder_if_does_not_exist
 
@@ -16,13 +17,15 @@ HEADERS = {"Content-Type": "application/json"}
 
 create_folder_if_does_not_exist(API_Final_DIR)
 
+updated_since = (datetime.utcnow() - timedelta(days=30)).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
 
 def fetch_all_tickets():
     tickets = []
     page = 1
-    url = f"{domain}/api/v2/tickets?include=stats&per_page=100&page={page}"
+    url = f"{domain}/api/v2/tickets?include=stats&per_page=100&updated_since={updated_since}&page={page}"
+    # url = f"{domain}/api/v2/tickets?include=stats&per_page=100&page={page}"
 
     while url:
         response = requests.get(url, auth=(token, "X"), headers=HEADERS, verify=False)

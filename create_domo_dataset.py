@@ -4,7 +4,7 @@ import os
 from pydomo import Domo, Column, ColumnType, Schema
 from pydomo import DataSetRequest
 
-from commons import Ticket_ID_Data
+from commons import Ticket_Data
 from config.env import CLIENT_ID, CLIENT_SECRET
 from utils import send_email_error
 
@@ -27,7 +27,7 @@ def datasets(domo, file_path):
 if __name__ == "__main__":
     try:
         csv_files = [
-            Ticket_ID_Data
+            Ticket_Data
         ]
         domo = Domo(CLIENT_ID, CLIENT_SECRET, api_host='api.domo.com')
 
