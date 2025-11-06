@@ -1,15 +1,19 @@
+from commons import *
+import logging
 import time
 import requests
 import warnings
 import pandas as pd
+from config.env import token, domain
 from datetime import datetime, timedelta
-
+from logger_config import setup_logging
 from utils import create_folder_if_does_not_exist
 
 warnings.filterwarnings("ignore")
 
-from config.env import token, domain
-from commons import *
+# Setup logging
+setup_logging(module_name="fetch_tickets")
+logger = logging.getLogger(__name__)
 
 PER_PAGE = 100
 HEADERS = {"Content-Type": "application/json"}
@@ -32,18 +36,18 @@ def fetch_all_tickets():
 
         # Handle rate limit
         if response.status_code == 429:
-            print("Rate limit reached. Sleeping 60s...")
+            logger.info("Rate limit reached. Sleeping 60s...")
             time.sleep(60)
             continue
 
         if response.status_code != 200:
-            print(f"❌ Error {response.status_code}: {response.text}")
+            logger.error(f"❌ Error {response.status_code}: {response.text}")
             break
 
         try:
             data = response.json()
         except ValueError:
-            print("❌ JSON decode failed, skipping page...")
+            logger.error("❌ JSON decode failed, skipping page...")
             break
 
         tickets.extend(data)
@@ -54,7 +58,7 @@ def fetch_all_tickets():
             next_link = [l for l in link_header.split(",") if 'rel="next"' in l][0]
             url = next_link.split(";")[0].strip("<> ")
             page += 1
-            print(f"➡️ Fetching next page ({page}) ...")
+            logger.info(f"➡️ Fetching next page ({page}) ...")
         else:
             url = None
 
@@ -72,11 +76,11 @@ def clean_lists(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def main():
-    print("📦 Fetching Freshdesk tickets (with stats)...")
+    logger.info("📦 Fetching Freshdesk tickets (with stats)...")
     tickets = fetch_all_tickets()
 
     if not tickets:
-        print("⚠️ No tickets found.")
+        logger.error("⚠️ No tickets found.")
         return
 
     # Flatten all JSON fields (including nested ones like stats.*)
